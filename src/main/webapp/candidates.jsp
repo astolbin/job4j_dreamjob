@@ -1,10 +1,11 @@
 <%@ page contentType="text/html; charset=UTF-8" %>
 <%@ page import="ru.job4j.dream.store.Store" %>
-<%@ page import="ru.job4j.dream.model.Post" %>
+<%@ page import="ru.job4j.dream.model.Candidate" %>
 <!doctype html>
 <html lang="en">
 <head>
     <!-- Required meta tags -->
+    <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
     <!-- Bootstrap CSS -->
@@ -17,32 +18,36 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
             integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
 
-    <title>Работа мечты!</title>
+    <title>Работа мечты</title>
 </head>
 <body>
-    <div class="container">
-        <div class="row">
-            <table class="table">
-                <thead>
+<div class="container pt-3">
+
+    <div class="row">
+        <div class="card" style="width: 100%">
+            <div class="card-header">
+                Кандидаты
+            </div>
+            <div class="card-body">
+                <table class="table">
+                    <thead>
                     <tr>
-                        <th scope="col">Id</th>
-                        <th scope="col">Объявления</th>
-                        <th scope="col">Описание</th>
-                        <th scope="col">Дата добавления</th>
+                        <th scope="col">ID</th>
+                        <th scope="col">Имя</th>
                     </tr>
-                </thead>
-                <tbody>
-                <% for (Post post : Store.instOf().findAllPosts()) { %>
+                    </thead>
+                    <tbody>
+                    <% for (Candidate can : Store.instOf().findAllCandidates()) { %>
                     <tr>
-                        <td><%= post.getId() %></td>
-                        <td><%= post.getName() %></td>
-                        <td><%= post.getDescription() %></td>
-                        <td><%= post.getCreated() %></td>
+                        <td><%= can.getId() %></td>
+                        <td><%= can.getName() %></td>
                     </tr>
-                <% } %>
-                </tbody>
-            </table>
+                    <% } %>
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
+</div>
 </body>
 </html>
