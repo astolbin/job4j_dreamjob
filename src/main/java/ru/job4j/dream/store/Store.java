@@ -20,9 +20,9 @@ public class Store {
     private final Map<Integer, Candidate> candidates = new ConcurrentHashMap<>();
 
     private Store() {
-        posts.put(1, new Post(1, "Junior Java Job", "Description of Junior Java Job", LocalDate.now()));
-        posts.put(2, new Post(2, "Middle Java Job", "Description of Junior Java Job", LocalDate.now()));
-        posts.put(3, new Post(3, "Senior Java Job", "Description of Junior Java Job", LocalDate.now()));
+        posts.put(1, new Post(1, "Junior Java Job"));
+        posts.put(2, new Post(2, "Middle Java Job"));
+        posts.put(3, new Post(3, "Senior Java Job"));
 
         candidates.put(1, new Candidate(1, "Junior Java"));
         candidates.put(2, new Candidate(2, "Middle Java"));
@@ -42,12 +42,24 @@ public class Store {
     }
 
     public void save(Post post) {
-        post.setId(POST_ID.incrementAndGet());
+        if (post.getId() == 0) {
+            post.setId(POST_ID.incrementAndGet());
+        }
         posts.put(post.getId(), post);
     }
 
+    public Post findPostById(int id) {
+        return posts.get(id);
+    }
+
     public void save(Candidate candidate) {
-        candidate.setId(CANDIDATE_ID.incrementAndGet());
+        if (candidate.getId() == 0) {
+            candidate.setId(CANDIDATE_ID.incrementAndGet());
+        }
         candidates.put(candidate.getId(), candidate);
+    }
+
+    public Candidate findCandidateById(int id) {
+        return candidates.get(id);
     }
 }
