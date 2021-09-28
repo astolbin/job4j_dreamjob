@@ -1,7 +1,7 @@
 package ru.job4j.dream.servlet;
 
 import ru.job4j.dream.model.Post;
-import ru.job4j.dream.store.Store;
+import ru.job4j.dream.store.MemStore;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -15,7 +15,7 @@ public class EditPostServlet extends HttpServlet {
         String id = req.getParameter("id");
         Post post = new Post(0, "");
         if (id != null) {
-            post = Store.instOf().findPostById(Integer.parseInt(id));
+            post = MemStore.instOf().findPostById(Integer.parseInt(id));
         }
         req.setAttribute("post", post);
         req.getRequestDispatcher("/post/edit.jsp").forward(req, resp);
