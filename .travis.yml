@@ -1,0 +1,12 @@
+language: java
+jdk:
+  - openjdk15
+
+sudo: false
+
+notifications:
+  email:
+    recipients:
+      - astolbin@ya.ru
+    on_success: never # default: change
+    on_failure: always # default: always

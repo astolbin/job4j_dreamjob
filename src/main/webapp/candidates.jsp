@@ -35,6 +35,8 @@
                     <tr>
                         <th scope="col">ID</th>
                         <th scope="col">Имя</th>
+                        <th scope="col">Фото</th>
+                        <th scope="col">Удалить</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -46,6 +48,27 @@
                                 <i class="fa fa-edit mr-3"></i>
                             </a>
                             <c:out value="${can.name}"/>
+                        </td>
+                        <td>
+                            <c:set var="hasImage" value="false" />
+                            <c:forEach var="id" items="${images}">
+                              <c:if test="${id eq can.id}">
+                                <c:set var="hasImage" value="true" />
+                              </c:if>
+                            </c:forEach>
+
+                            <c:if test="${hasImage}">
+                                <a href="<c:url value='/download.do?id=${can.id}'/>">
+                                    <img src="<c:url value='/download.do?id=${can.id}'/>" height="100px"/>
+                                </a>
+                            </c:if>
+
+                            <c:if test="${not hasImage}">
+                                <a href="<c:url value="/candidate/uploadPhoto.do?id=${can.id}"/>">Добавить</a>
+                            </c:if>
+                        </td>
+                        <td>
+                            <a href="<c:url value="/delete.do?id=${can.id}"/>"> X </a>
                         </td>
                     </tr>
                     </c:forEach>

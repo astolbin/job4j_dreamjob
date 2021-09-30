@@ -7,13 +7,21 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.File;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
+import java.util.*;
 
 public class CandidateServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         req.setAttribute("candidates", MemStore.instOf().findAllCandidates());
+        List<Integer> images = new ArrayList<>();
+        for (File file : new File("c:\\images\\").listFiles()) {
+            String fileName = file.getName().replaceFirst("[.][^.]+$", "");
+            images.add(Integer.parseInt(fileName));
+        }
+        req.setAttribute("images", images);
         req.getRequestDispatcher("candidates.jsp").forward(req, resp);
     }
 
