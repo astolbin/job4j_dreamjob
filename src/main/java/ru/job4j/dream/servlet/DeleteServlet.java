@@ -1,6 +1,6 @@
 package ru.job4j.dream.servlet;
 
-import ru.job4j.dream.store.MemStore;
+import ru.job4j.dream.store.PsqlStore;
 
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -12,7 +12,7 @@ public class DeleteServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         int candidateId = Integer.parseInt(req.getParameter("id"));
-        MemStore.instOf().deleteCandidate(candidateId);
+        PsqlStore.instOf().deleteCandidate(candidateId);
 
         for (File file : new File("c:\\images\\").listFiles()) {
             String fileName = file.getName().replaceFirst("[.][^.]+$", "");
