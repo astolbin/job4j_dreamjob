@@ -22,6 +22,7 @@ public class CandidateServlet extends HttpServlet {
             images.add(Integer.parseInt(fileName));
         }
         req.setAttribute("images", images);
+        req.setAttribute("user", req.getSession().getAttribute("user"));
         req.getRequestDispatcher("candidates.jsp").forward(req, resp);
     }
 
