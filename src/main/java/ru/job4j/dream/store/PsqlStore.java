@@ -239,10 +239,12 @@ public class PsqlStore implements Store {
             ps.setString(1, email);
             ResultSet result = ps.executeQuery();
             if (result.next()) {
-                user.setId(result.getInt("id"));
-                user.setName(result.getString("name"));
-                user.setEmail(email);
-                user.setPassword(result.getString("password"));
+                user = new User(
+                        result.getInt("id"),
+                        result.getString("name"),
+                        email,
+                        result.getString("password")
+                );
             }
         } catch (Exception e) {
             e.printStackTrace();
