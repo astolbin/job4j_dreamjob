@@ -20,12 +20,6 @@ public class RegServlet extends HttpServlet {
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         req.setCharacterEncoding(StandardCharsets.UTF_8.name());
 
-        if (isIncompleteData(req)) {
-            req.setAttribute("error", "Не заполнены все поля формы.");
-            req.getRequestDispatcher("reg.jsp").forward(req, resp);
-            return;
-        }
-
         if (hasUser(req.getParameter("email"))) {
             req.setAttribute("error", "Пользователь с таким email-адресом уже существует.");
             req.getRequestDispatcher("reg.jsp").forward(req, resp);
@@ -42,11 +36,5 @@ public class RegServlet extends HttpServlet {
 
     private boolean hasUser(String email) {
         return PsqlStore.instOf().findUserByEmail(email) != null;
-    }
-
-    private boolean isIncompleteData(HttpServletRequest req) {
-        return req.getParameter("name").isEmpty()
-                || req.getParameter("name").isEmpty()
-                || req.getParameter("name").isEmpty();
     }
 }
