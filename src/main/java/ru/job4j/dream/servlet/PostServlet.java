@@ -12,7 +12,8 @@ import java.nio.charset.StandardCharsets;
 
 public class PostServlet extends HttpServlet {
     @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp)
+            throws ServletException, IOException {
         req.setAttribute("posts", PsqlStore.instOf().findAllPosts());
         req.setAttribute("user", req.getSession().getAttribute("user"));
         req.getRequestDispatcher("posts.jsp").forward(req, resp);

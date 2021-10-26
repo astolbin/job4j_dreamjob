@@ -11,7 +11,8 @@ import java.io.IOException;
 
 public class EditCandidateServlet extends HttpServlet {
     @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp)
+            throws ServletException, IOException {
         String id = req.getParameter("id");
         Candidate candidate = new Candidate(0, "");
         if (id != null) {

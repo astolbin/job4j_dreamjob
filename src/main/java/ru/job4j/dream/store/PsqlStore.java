@@ -6,14 +6,9 @@ import ru.job4j.dream.model.Post;
 import ru.job4j.dream.model.User;
 
 import java.io.BufferedReader;
-import java.io.FileReader;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Properties;
+import java.io.InputStreamReader;
+import java.sql.*;
+import java.util.*;
 
 public class PsqlStore implements Store {
 
@@ -22,7 +17,10 @@ public class PsqlStore implements Store {
     private PsqlStore() {
         Properties cfg = new Properties();
         try (BufferedReader io = new BufferedReader(
-                new FileReader("db.properties")
+                new InputStreamReader(
+                        PsqlStore.class.getClassLoader()
+                                .getResourceAsStream("db.properties")
+                )
         )) {
             cfg.load(io);
         } catch (Exception e) {
@@ -284,8 +282,9 @@ public class PsqlStore implements Store {
     }
 
     private void update(User user) {
+        String sql = "UPDATE users SET name = ?, email = ?, password = ? WHERE id = ?";
         try (Connection cn = pool.getConnection();
-             PreparedStatement ps = cn.prepareStatement("UPDATE users SET name = ?, email = ?, password = ? WHERE id = ?")
+             PreparedStatement ps = cn.prepareStatement(sql)
         ) {
             ps.setString(1, user.getName());
             ps.setString(2, user.getEmail());
@@ -293,6 +292,20 @@ public class PsqlStore implements Store {
             ps.setInt(4, user.getId());
             ps.executeUpdate();
         } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void clear() {
+        try (Connection connection = pool.getConnection();
+             Statement statement = connection.createStatement()
+        ) {
+            for (String table : List.of("post", "candidate", "users")) {
+                statement.executeUpdate("DELETE FROM " + table);
+                statement.executeUpdate("ALTER TABLE " + table + " ALTER COLUMN id RESTART WITH 1");
+            }
+
+        } catch (SQLException e) {
             e.printStackTrace();
         }
     }

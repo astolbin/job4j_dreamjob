@@ -22,7 +22,7 @@ public class DownloadServlet extends HttpServlet {
         resp.setContentType("application/octet-stream");
         resp.setHeader("Content-Disposition", "attachment; filename=\"" + rsl.getName() + "\"");
 
-        try (FileInputStream stream = new FileInputStream(rsl)){
+        try (FileInputStream stream = new FileInputStream(rsl)) {
             resp.getOutputStream().write(stream.readAllBytes());
         }
     }

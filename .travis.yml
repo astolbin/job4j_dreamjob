@@ -2,8 +2,6 @@ language: java
 jdk:
   - openjdk15
 
-sudo: false
-
 notifications:
   email:
     recipients:
