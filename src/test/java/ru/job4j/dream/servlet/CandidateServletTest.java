@@ -28,6 +28,7 @@ public class CandidateServletTest {
         HttpServletResponse resp = mock(HttpServletResponse.class);
         when(req.getParameter("id")).thenReturn("0");
         when(req.getParameter("name")).thenReturn("New candidate");
+        when(req.getParameter("city_id")).thenReturn("0");
 
         new CandidateServlet().doPost(req, resp);
 
@@ -38,17 +39,18 @@ public class CandidateServletTest {
 
     @Test
     public void whenUpdatePost() throws IOException {
-        Candidate candidate = new Candidate(0, "New candidate");
+        Candidate candidate = new Candidate(0, "New candidate", 0);
         PsqlStore.instOf().save(candidate);
 
         HttpServletRequest req = mock(HttpServletRequest.class);
         HttpServletResponse resp = mock(HttpServletResponse.class);
         when(req.getParameter("id")).thenReturn(String.valueOf(candidate.getId()));
         when(req.getParameter("name")).thenReturn("Updated candidate");
+        when(req.getParameter("city_id")).thenReturn("1");
 
         new CandidateServlet().doPost(req, resp);
 
         Candidate rsl = PsqlStore.instOf().findAllCandidates().iterator().next();
-        assertThat(rsl.getName(), is("Updated candidate"));
+        assertThat(rsl, is(new Candidate(candidate.getId(), "Updated candidate", 1)));
     }
 }

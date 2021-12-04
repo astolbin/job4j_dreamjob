@@ -1,13 +1,16 @@
 package ru.job4j.dream.store;
 
 import ru.job4j.dream.model.Candidate;
+import ru.job4j.dream.model.City;
 import ru.job4j.dream.model.Post;
 import ru.job4j.dream.model.User;
 
+import java.time.LocalDate;
 import java.util.Collection;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.stream.Collectors;
 
 public class MemStore implements Store {
 
@@ -15,12 +18,15 @@ public class MemStore implements Store {
     private static final AtomicInteger POST_ID = new AtomicInteger(4);
     private static final AtomicInteger CANDIDATE_ID = new AtomicInteger(4);
     private static final AtomicInteger USER_ID = new AtomicInteger(4);
+    private static final AtomicInteger CITY_ID = new AtomicInteger(4);
 
     private final Map<Integer, Post> posts = new ConcurrentHashMap<>();
 
     private final Map<Integer, Candidate> candidates = new ConcurrentHashMap<>();
 
     private final Map<Integer, User> users = new ConcurrentHashMap<>();
+
+    private final Map<Integer, City> cities = new ConcurrentHashMap<>();
 
     private MemStore() {
 
@@ -36,6 +42,10 @@ public class MemStore implements Store {
 
     public Collection<Candidate> findAllCandidates() {
         return candidates.values();
+    }
+
+    public Collection<City> findAllCities() {
+        return cities.values();
     }
 
     public void save(Post post) {
@@ -81,9 +91,37 @@ public class MemStore implements Store {
     }
 
     @Override
+    public void save(City city) {
+        if (city.getId() == 0) {
+            city.setId(CITY_ID.incrementAndGet());
+        }
+        cities.put(city.getId(), city);
+    }
+
+    @Override
+    public City findCityById(int id) {
+        return cities.get(id);
+    }
+
+    @Override
+    public Collection<Post> findTodayPosts() {
+        return posts.values().stream()
+                .filter(post -> post.getCreated().toLocalDate().equals(LocalDate.now()))
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public Collection<Candidate> findTodayCandidates() {
+        return candidates.values().stream()
+                .filter(candidate -> candidate.getCreated().toLocalDate().equals(LocalDate.now()))
+                .collect(Collectors.toList());
+    }
+
+    @Override
     public void clear() {
         posts.clear();
         candidates.clear();
         users.clear();
+        cities.clear();
     }
 }

@@ -3,9 +3,11 @@ package ru.job4j.dream.store;
 import org.junit.Before;
 import org.junit.Test;
 import ru.job4j.dream.model.Candidate;
+import ru.job4j.dream.model.City;
 import ru.job4j.dream.model.Post;
 import ru.job4j.dream.model.User;
 
+import java.time.LocalDateTime;
 import java.util.Collection;
 
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -49,7 +51,7 @@ public class PsqlStoreTest {
     @Test
     public void whenCreateCandidate() {
         Store store = PsqlStore.instOf();
-        Candidate candidate = new Candidate(0, "Candidate");
+        Candidate candidate = new Candidate(0, "Candidate", 0);
         store.save(candidate);
         Candidate candidateInDb = store.findCandidateById(candidate.getId());
         assertThat(candidateInDb.getName(), is(candidate.getName()));
@@ -58,7 +60,7 @@ public class PsqlStoreTest {
     @Test
     public void whenDeleteCandidate() {
         Store store = PsqlStore.instOf();
-        Candidate candidate = new Candidate(0, "Candidate");
+        Candidate candidate = new Candidate(0, "Candidate", 0);
         store.save(candidate);
         assertThat(store.findCandidateById(candidate.getId()), is(candidate));
         store.deleteCandidate(candidate.getId());
@@ -68,7 +70,7 @@ public class PsqlStoreTest {
     @Test
     public void whenUpdateCandidate() {
         Store store = PsqlStore.instOf();
-        Candidate candidate = new Candidate(0, "Candidate");
+        Candidate candidate = new Candidate(0, "Candidate", 0);
         store.save(candidate);
         candidate.setName("Candidate 2");
         store.save(candidate);
@@ -79,8 +81,8 @@ public class PsqlStoreTest {
     @Test
     public void whenGetAllCandidates() {
         Store store = PsqlStore.instOf();
-        store.save(new Candidate(0, "Candidate 1"));
-        store.save(new Candidate(0, "Candidate 2"));
+        store.save(new Candidate(0, "Candidate 1", 0));
+        store.save(new Candidate(0, "Candidate 2", 0));
         Collection<Candidate> candidateInDb = store.findAllCandidates();
         assertThat(candidateInDb.size(), is(2));
     }
@@ -103,5 +105,43 @@ public class PsqlStoreTest {
         store.save(user);
         User userInDb = store.findUserByEmail(user.getEmail());
         assertThat(userInDb.getName(), is("User 2"));
+    }
+
+    @Test
+    public void whenCreateCity() {
+        Store store = PsqlStore.instOf();
+        City city = new City(0, "City");
+        store.save(city);
+        City cityInDb = store.findCityById(city.getId());
+        assertThat(cityInDb.getName(), is(city.getName()));
+    }
+
+    @Test
+    public void whenUpdateCity() {
+        Store store = PsqlStore.instOf();
+        City city = new City(0, "City");
+        store.save(city);
+        city.setName("City 2");
+        store.save(city);
+        City cityInDb = store.findCityById(city.getId());
+        assertThat(cityInDb.getName(), is("City 2"));
+    }
+
+    @Test
+    public void whenGetTodayPosts() {
+        Store store = PsqlStore.instOf();
+        store.save(new Post(0, "Java Job 1", LocalDateTime.now().minusDays(1)));
+        store.save(new Post(0, "Java Job 2"));
+        Collection<Post> postsInDb = store.findTodayPosts();
+        assertThat(postsInDb.size(), is(1));
+    }
+
+    @Test
+    public void whenGetTodayCandidates() {
+        Store store = PsqlStore.instOf();
+        store.save(new Candidate(0, "Candidate 1", 1, LocalDateTime.now().minusDays(1)));
+        store.save(new Candidate(0, "Candidate 2", 2));
+        Collection<Candidate> candidatesInDb = store.findTodayCandidates();
+        assertThat(candidatesInDb.size(), is(1));
     }
 }
