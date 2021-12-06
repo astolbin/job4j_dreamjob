@@ -5,7 +5,7 @@ import ru.job4j.dream.model.City;
 import ru.job4j.dream.model.Post;
 import ru.job4j.dream.model.User;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -106,14 +106,16 @@ public class MemStore implements Store {
     @Override
     public Collection<Post> findTodayPosts() {
         return posts.values().stream()
-                .filter(post -> post.getCreated().toLocalDate().equals(LocalDate.now()))
+                .filter(post -> post.getCreated().isAfter(LocalDateTime.now().minusHours(24)))
                 .collect(Collectors.toList());
     }
 
     @Override
     public Collection<Candidate> findTodayCandidates() {
         return candidates.values().stream()
-                .filter(candidate -> candidate.getCreated().toLocalDate().equals(LocalDate.now()))
+                .filter(candidate -> {
+                    return candidate.getCreated().isAfter(LocalDateTime.now().minusHours(24));
+                })
                 .collect(Collectors.toList());
     }
 

@@ -130,7 +130,7 @@ public class PsqlStoreTest {
     @Test
     public void whenGetTodayPosts() {
         Store store = PsqlStore.instOf();
-        store.save(new Post(0, "Java Job 1", LocalDateTime.now().minusDays(1)));
+        store.save(new Post(0, "Java Job 1", LocalDateTime.now().minusDays(2)));
         store.save(new Post(0, "Java Job 2"));
         Collection<Post> postsInDb = store.findTodayPosts();
         assertThat(postsInDb.size(), is(1));
@@ -139,7 +139,7 @@ public class PsqlStoreTest {
     @Test
     public void whenGetTodayCandidates() {
         Store store = PsqlStore.instOf();
-        store.save(new Candidate(0, "Candidate 1", 1, LocalDateTime.now().minusDays(1)));
+        store.save(new Candidate(0, "Candidate 1", 1, LocalDateTime.now().minusDays(2)));
         store.save(new Candidate(0, "Candidate 2", 2));
         Collection<Candidate> candidatesInDb = store.findTodayCandidates();
         assertThat(candidatesInDb.size(), is(1));

@@ -421,10 +421,10 @@ public class PsqlStore implements Store {
     @Override
     public Collection<Post> findTodayPosts() {
         List<Post> posts = new ArrayList<>();
+        String sql = "SELECT * FROM post "
+                + "where created between now() - interval '24' hour and now()";
         try (Connection cn = pool.getConnection();
-             PreparedStatement ps = cn.prepareStatement(
-                     "SELECT * FROM post where created between now()::date and now()"
-             )
+             PreparedStatement ps = cn.prepareStatement(sql)
         ) {
             try (ResultSet it = ps.executeQuery()) {
                 while (it.next()) {
@@ -446,10 +446,10 @@ public class PsqlStore implements Store {
     @Override
     public Collection<Candidate> findTodayCandidates() {
         List<Candidate> candidates = new ArrayList<>();
+        String sql = "SELECT * FROM candidate "
+                + "where created between now() - interval '24' hour and now()";
         try (Connection cn = pool.getConnection();
-             PreparedStatement ps =  cn.prepareStatement(
-                     "SELECT * FROM candidate where created between now()::date and now()"
-             )
+             PreparedStatement ps = cn.prepareStatement(sql)
         ) {
             try (ResultSet it = ps.executeQuery()) {
                 while (it.next()) {
